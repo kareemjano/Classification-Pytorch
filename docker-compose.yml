@@ -1,10 +1,8 @@
 version: '3'
 services:
-  watson_portal:
-    build: ./src
-    ports:
-      - "5000:5000"
+  classification:
+    container_name: "classification"
+    build: ./classification
     volumes:
-      - ./src:/app
-    environment:
-      FLASK_ENV: development
+      - ./classification/src:/app/src
+    restart: unless-stopped

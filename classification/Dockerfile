@@ -1,5 +1,20 @@
-FROM python:3.7
-ADD . /ibm-watson-code
-WORKDIR /ibm-watson-code
-RUN pip install -r requirements.txt
-CMD ["python", "app.py"]
+FROM ubuntu:18.04
+
+RUN apt-get update
+RUN apt-get install -y python3.7 python3.7-dev python3-pip
+
+#COPY ./requirements.txt /app/requirements.txt
+WORKDIR /app
+
+#RUN pip3 install -r requirements.txt
+
+COPY ./src /app/src
+
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+ENV PYTHONIOENCODING=utf-8
+
+#ENTRYPOINT [ "python3" ]
+#CMD ["flask", "run"]
+#CMD [ "python3", "run.py"]
