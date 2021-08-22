@@ -1,0 +1,6 @@
+[core]
+    remote = gdrive
+[cache]
+    type = "symlink"
+['remote "gdrive"']
+    url = gdrive://1kWeRIUtdXHXzr5xv5wqenqi6FqH36Um4/classification

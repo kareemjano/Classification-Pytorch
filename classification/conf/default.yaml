@@ -1,0 +1,5 @@
+datasets:
+  celeba:
+    data_path: ../../../data/celeba/img_align_celeba
+    labels_txt_path: ../../../data/celeba/identity_CelebA.txt
+    split_txt_path: ../../../data/celeba/list_eval_partition.txt
