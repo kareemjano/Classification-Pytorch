@@ -1,0 +1,6 @@
+[submodule "classification/src/image-toolbox"]
+	path = classification/src/image-toolbox
+	url = git@github.com:kareemjano/image-toolbox.git
+[submodule "classification/src/image_toolbox"]
+	path = classification/src/image_toolbox
+	url = git@github.com:kareemjano/image_toolbox.git

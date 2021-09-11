@@ -1,5 +1,7 @@
 datasets:
   celeba:
-    data_path: ../../../data/celeba/img_align_celeba
-    labels_txt_path: ../../../data/celeba/identity_CelebA.txt
-    split_txt_path: ../../../data/celeba/list_eval_partition.txt
+    base_url: ../../../data/celeba
+    zip_file_name: img_align_celeba.zip
+    data_dir_name: img_align_celeba
+    labels_txt_file: identity_CelebA.txt
+    split_txt_file: list_eval_partition.txt
