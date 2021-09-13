@@ -1,6 +1,6 @@
 datasets:
   celeba:
-    base_url: ../../../data/celeba
+    base_url: /home/kareem/PycharmProjects/Classification-Pytorch/classification/data/celeba
     zip_file_name: img_align_celeba.zip
     data_dir_name: img_align_celeba
     labels_txt_file: identity_CelebA.txt

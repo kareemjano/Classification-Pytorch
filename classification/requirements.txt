@@ -1,2 +1,10 @@
+numpy
+torch
+torchvision
+pytorch_lightning
+opencv-python
+facenet_pytorch
+imgaug
 dvc[gdrive]
 hydra-core
+

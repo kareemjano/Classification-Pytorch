@@ -41,7 +41,7 @@ def to_folders(cfg: DictConfig) -> None:
     imgs_path = unzip_file(urls["zip_file_url"], urls['data_url'])
 
     map = None
-    if urls["labels_txt_url"] is not None:
+    if urls["split_txt_url"] is not None:
         map = celeba_split_from_file(imgs_path, urls["split_txt_url"])
 
     celeba_save_images_in_folders(imgs_path, urls["labels_txt_url"], map=map)
