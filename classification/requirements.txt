@@ -7,4 +7,5 @@ facenet_pytorch
 imgaug
 dvc[gdrive]
 hydra-core
-
+scikit-learn
+torchsummary

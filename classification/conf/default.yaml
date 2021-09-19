@@ -1,7 +1,55 @@
 datasets:
   celeba:
     base_url: /home/kareem/PycharmProjects/Classification-Pytorch/classification/data/celeba
+    exp_name: celeba_classification_myCNN
     zip_file_name: img_align_celeba.zip
     data_dir_name: img_align_celeba
     labels_txt_file: identity_CelebA.txt
     split_txt_file: list_eval_partition.txt
+    val_test_r: [0.20, 0.20]
+    min_samples_per_class: 5
+    nb_samples: 100
+nets:
+  myCNN:
+    hparams:
+      lr: 0.0001
+      weight_decay: 1e-5
+      filter_size: 3
+      filter_channels: 4
+      n_hidden1: 4096
+      n_hidden2: 2048
+      temperature: 10
+      dropout: 0.0
+    params:
+      input_shape: [3, 218, 178]
+    scheduler_params:
+      step_size: 10
+      gamma: 0.5
+    trainer_params:
+      check_val_every_n_epoch: 1
+      fast_dev_run: False
+      max_epochs: 100
+      gpus: 1
+    early_stopping_params:
+      monitor: val_acc
+      patience: 5
+      strict: True
+      verbose: False
+      mode: max
+    checkpoint_params:
+      monitor: val_acc
+      checkpoint_dir: build/checkpoint
+      filename: MyCNN-{epoch:02d}-{val_acc:.2f}
+      save_top_k: 1
+      mode: max
+validation_params:
+  run_val: True
+  run_test: True
+  ckpt_file: MyCNN-epoch=03-val_acc=0.55.ckpt
+inference_params:
+  img_path: /home/kareem/PycharmProjects/Classification-Pytorch/classification/data/celeba/img_align_celeba/9563/132413.jpg
+  ckpt_file: MyCNN-epoch=03-val_acc=0.55.ckpt
+logger_params:
+  logger: Mlflow #Mlflow or Tensorboard
+  logger_dir: build/mlflow
+
