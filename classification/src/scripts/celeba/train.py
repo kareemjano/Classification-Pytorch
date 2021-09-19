@@ -10,20 +10,24 @@ import sys
 sys.path.append('src')
 
 from datasets.celeba.classification_dataloader import Classification_Dataloader
-from nets.simple_net import Classification_Net
+from nets.cnn_net import Classification_Net
 
 logger = logging.getLogger(__name__)
 def get_callbacks(cfg):
+    model_select = cfg.nets.select
+    net_params = cfg.nets[model_select]
+    dataset_params = cfg.datasets.celeba
+
     early_stop_callback = pl.callbacks.EarlyStopping(
-        **cfg.nets.myCNN.early_stopping_params
+        **net_params.early_stopping_params
     )
 
-    checkpoint_params = cfg.nets.myCNN.checkpoint_params
+    checkpoint_params = net_params.checkpoint_params
     checkpoint_callback = pl.callbacks.ModelCheckpoint(
         monitor=checkpoint_params.monitor,
-        dirpath=str(Path(cfg.datasets.celeba.base_url) /
+        dirpath=str(Path(dataset_params.base_url) /
                     checkpoint_params.checkpoint_dir /
-                    cfg.datasets.celeba.exp_name),
+                    net_params.exp_name),
         filename=checkpoint_params.filename,
         save_top_k=checkpoint_params.save_top_k,
         mode=checkpoint_params.mode,
@@ -44,11 +48,14 @@ def train(cfg: DictConfig):
     celeba.setup()
     model = Classification_Net(cfg, nb_classes=celeba.nb_classes())
 
+    model_select = cfg.nets.select
+    net_params = cfg.nets[model_select]
+
     if torch.cuda.is_available():
         model.to('cuda')
 
     logger.info('model summary')
-    logger.info(summary(model, [(3, cfg.nets.myCNN.params.input_shape[1], cfg.nets.myCNN.params.input_shape[2])]))
+    logger.info(summary(model, [(3, net_params.params.input_shape[1], net_params.params.input_shape[2])]))
     model.cpu()
 
     callbacks = get_callbacks(cfg)
@@ -57,17 +64,17 @@ def train(cfg: DictConfig):
     if cfg.logger_params.logger.lower() == "tensorboard":
         stats_logger = TensorBoardLogger(
             Path(cfg.datasets.celeba.base_url) / cfg.logger_params.logger_dir,
-            name=cfg.datasets.celeba.exp_name
+            name=net_params.exp_name
         )
     elif cfg.logger_params.logger.lower() == "mlflow":
         stats_logger = MLFlowLogger(
-            experiment_name=cfg.datasets.celeba.exp_name,
+            experiment_name=net_params.exp_name,
             tracking_uri=str(Path(cfg.datasets.celeba.base_url) / cfg.logger_params.logger_dir)
         )
     else:
         logger.info("No valid logger is specified.")
 
-    trainer = pl.Trainer(**cfg.nets.myCNN.trainer_params, logger=stats_logger, callbacks=callbacks)
+    trainer = pl.Trainer(**net_params.trainer_params, logger=stats_logger, callbacks=callbacks)
     trainer.fit(model, celeba)
 
     if cfg.validation_params.run_val:

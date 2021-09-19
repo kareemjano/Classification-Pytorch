@@ -9,3 +9,4 @@ dvc[gdrive]
 hydra-core
 scikit-learn
 torchsummary
+pretrainedmodels

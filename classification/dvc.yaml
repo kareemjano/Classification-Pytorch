@@ -2,7 +2,10 @@ stages:
   prepare:
     cmd: python src/scripts/celeba/prepare_celeba.py
     deps:
-    - data/celeba/img_align_celeba.zip
     - src/scripts/celeba/prepare_celeba.py
     outs:
     - data/celeba/img_align_celeba
+  train:
+    cmd: python src/scripts/celeba/train.py
+    deps:
+    - src/scripts/celeba/train.py

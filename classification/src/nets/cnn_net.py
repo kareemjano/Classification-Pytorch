@@ -4,50 +4,60 @@ import pytorch_lightning as pl
 from .general_nets import FCN_layer
 from .my_CNNs import my_CNN
 from torch.optim.lr_scheduler import StepLR
+import pretrainedmodels
+
 
 class Classification_Net(pl.LightningModule):
     """
     Simple Classification Model
     """
+
     def __init__(self, conf, nb_classes):
         """
         configuration parameters containing params and hparams.
         """
         super().__init__()
         self.save_hyperparameters()
-        
-        self.conf = conf
-        self.model_params = conf.nets.myCNN.params
-        self.hparam = conf.nets.myCNN.hparams
-        self.scheduler_params = conf.nets.myCNN.scheduler_params
 
+        self.conf = conf
+        self.model_select = conf.nets.select
+        self.net_params = conf.nets[self.model_select]
+        self.model_params = self.net_params.params
+        self.hparam = self.net_params.hparams
+        self.scheduler_params = self.net_params.scheduler_params
         # CNN
         self.input_shape = tuple(self.model_params["input_shape"])
-        self.conv = my_CNN(nn.PReLU,
-                          self.hparam["filter_size"],
-                          self.hparam["filter_channels"],
-                          padding=int(self.hparam["filter_size"] / 2),
-                          input_shape=self.input_shape
-                          )  # size/8 x 4*channels
 
-        channels, height, width = self.input_shape
-        self.cnn_output_size = int(self.hparam["filter_channels"] * 4 * int(height / 8) * int(width / 8))
+        if self.model_select == "bcinception":
+            self.conv = pretrainedmodels.bninception(num_classes=1000, pretrained="imagenet")
+            self.conv.last_linear = nn.Linear(1024, nb_classes)
+        elif self.model_select == "simple_cnn":
+            self.conv = my_CNN(nn.PReLU,
+                               self.hparam["filter_size"],
+                               self.hparam["filter_channels"],
+                               padding=int(self.hparam["filter_size"] / 2),
+                               input_shape=self.input_shape
+                               )  # size/8 x 4*channels
 
-        self.out = nn.Sequential(
-            FCN_layer(self.cnn_output_size, self.hparam['n_hidden1']),
-            FCN_layer(self.hparam['n_hidden1'], self.hparam['n_hidden2'], dropout=self.hparam['dropout']),
-            nn.Linear(self.hparam['n_hidden2'], nb_classes),
-        )
+            channels, height, width = self.input_shape
+            self.cnn_output_size = int(self.hparam["filter_channels"] * 4 * int(height / 8) * int(width / 8))
+
+            self.out = nn.Sequential(
+                FCN_layer(self.cnn_output_size, self.hparam['n_hidden1']),
+                FCN_layer(self.hparam['n_hidden1'], self.hparam['n_hidden2'], dropout=self.hparam['dropout']),
+                nn.Linear(self.hparam['n_hidden2'], nb_classes),
+            )
 
         self.params_to_update = []
         self.params_to_update = self.parameters()
 
     def forward(self, x):
         x = self.conv(x)
-        x = x.view(x.size()[0], -1)
-        if len(x.shape) == 3:
-            x = x.squeeze()
-        x = self.out(x)
+        if self.model_select == "simple_cnn":
+            x = x.view(x.size()[0], -1)
+            if len(x.shape) == 3:
+                x = x.squeeze()
+            x = self.out(x)
         return x
 
     def configure_optimizers(self):

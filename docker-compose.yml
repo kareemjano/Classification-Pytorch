@@ -5,4 +5,10 @@ services:
     build: ./classification
     volumes:
       - ./classification/src:/app/src
+      - ./classification/.dvc:/app/.dvc
+      - ./classification/conf:/app/conf
+      - ./classification/data:/app/data
+      - ./classification/requirements.txt:/app/requirements.txt
+      - ./classification/dvc.yaml:/app/dvc.yaml
+
     restart: unless-stopped
