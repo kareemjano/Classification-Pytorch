@@ -1,3 +1,2 @@
 git init
-dvc pull
-dvc repro
+dvc repro --no-commit

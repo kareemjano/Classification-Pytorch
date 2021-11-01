@@ -13,6 +13,8 @@ file_list = [
 
 @hydra.main(config_path="../../../conf", config_name="default")
 def download_celeba_dataset(cfg):
+    if not os.path.exists(cfg.datasets.celeba.base_url):
+        os.makedirs(cfg.datasets.celeba.base_url)
     for (file_id, filename) in file_list:
         output_path = os.path.join(cfg.datasets.celeba.base_url, filename)
         if not os.path.exists(output_path):

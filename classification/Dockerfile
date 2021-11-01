@@ -10,7 +10,6 @@ RUN ln -s /usr/bin/python3 /usr/bin/python && \
 WORKDIR /app
 
 COPY ./requirements.txt /app/requirements.txt
-COPY ./data /app/data
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
@@ -18,6 +17,4 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONIOENCODING=utf-8
 
-#CMD ["./start.sh"]
-
-#ENTRYPOINT [ "python3" ]
+CMD ["./start.sh"]
