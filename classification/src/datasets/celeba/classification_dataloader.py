@@ -24,6 +24,9 @@ class Classification_Dataloader(pl.LightningDataModule):
         :param image_aug_p: if >0 image_aug_p*len(dataset) images will be augmented and added.
         """
         super().__init__()
+        import os
+        print("dataloader cwd", os.getcwd())
+        self.base_url = Path(conf.datasets.celeba.base_url)
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.image_aug_p = image_aug_p
@@ -42,7 +45,7 @@ class Classification_Dataloader(pl.LightningDataModule):
         # split_labels_map = get_split_labels_map(label_txt_path=Path(self.dataset_conf.base_url) / self.dataset_conf.labels_txt_file,
         #                                         split_txt_path=Path(self.dataset_conf.base_url) / self.dataset_conf.split_txt_file)
 
-        img_names, labels = read_identity_file(label_txt_path=Path(self.dataset_conf.base_url) / self.dataset_conf.labels_txt_file,
+        img_names, labels = read_identity_file(label_txt_path=(self.base_url / self.dataset_conf.labels_txt_file),
                                                min_samples_per_class=self.dataset_conf.min_samples_per_class)
 
         if self.dataset_conf.nb_samples > 0:
@@ -50,7 +53,7 @@ class Classification_Dataloader(pl.LightningDataModule):
             img_names = img_names[sorted_indecies][:self.dataset_conf.nb_samples]
             labels = labels[sorted_indecies][:self.dataset_conf.nb_samples]
 
-        images_url = Path(self.dataset_conf.base_url) / self.dataset_conf.zip_file_name.split(".")[0]
+        images_url = self.base_url / self.dataset_conf.zip_file_name.split(".")[0]
 
         val_test_r = self.val_r + self.test_r
 

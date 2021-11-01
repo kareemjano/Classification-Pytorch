@@ -14,15 +14,25 @@ def check_cfg(cfg: DictConfig, urls):
     for key, value in list(urls.items()):
         if 'url' in key:
             p = Path(value)
-            assert p.exists(), str(p.resolve()) + " doesnt exist. " + "key "+key
+            assert p.exists(), str(p) + " doesnt exist. " + "key "+key
 
 
 @hydra.main(config_path="../../../conf", config_name="default")
 def to_folders(cfg: DictConfig) -> None:
-    urls = {
-        "base_url": Path(cfg.datasets.celeba.base_url)
-    }
+    import os
 
+    print("Preparing Celeba...")
+    print("cw dir", os.getcwd())
+    print(os.listdir(cfg.datasets.celeba.base_url))
+    print(cfg.datasets.celeba.base_url)
+
+    urls = {
+        "base_url": Path(cfg.datasets.celeba.base_url).resolve()
+    }
+    print(urls["base_url"].resolve())
+    print(cfg.datasets.celeba.zip_file_name in os.listdir(os.path.join(urls["base_url"])))
+    print(os.path.join(urls["base_url"], cfg.datasets.celeba.zip_file_name))
+    print(os.path.exists(os.path.join(urls["base_url"], cfg.datasets.celeba.zip_file_name)))
     urls.update({
         "zip_file_url": urls['base_url'] / cfg.datasets.celeba.zip_file_name,
         "labels_txt_url": urls['base_url'] / cfg.datasets.celeba.labels_txt_file,

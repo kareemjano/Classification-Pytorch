@@ -1,14 +1,16 @@
-version: '3'
+version: '2.3'
 services:
   classification:
     container_name: "classification"
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
     build: ./classification
     volumes:
       - ./classification/src:/app/src
       - ./classification/.dvc:/app/.dvc
       - ./classification/conf:/app/conf
-      - ./classification/data:/app/data
-      - ./classification/requirements.txt:/app/requirements.txt
       - ./classification/dvc.yaml:/app/dvc.yaml
+      - ./classification/start.sh:/app/start.sh
 
     restart: unless-stopped

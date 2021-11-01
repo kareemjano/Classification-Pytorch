@@ -44,6 +44,7 @@ def get_callbacks(cfg):
 
 @hydra.main(config_path="../../../conf", config_name="default")
 def train(cfg: DictConfig):
+    print("Staring training...")
     celeba = Classification_Dataloader(conf=cfg, batch_size=16, num_workers=12, image_aug_p=0)
     celeba.setup()
     model = Classification_Net(cfg, nb_classes=celeba.nb_classes())
@@ -77,9 +78,9 @@ def train(cfg: DictConfig):
     trainer = pl.Trainer(**net_params.trainer_params, logger=stats_logger, callbacks=callbacks)
     trainer.fit(model, celeba)
 
-    if cfg.validation_params.run_val:
+    if net_params.validation_params.run_val:
         trainer.test(model, celeba.val_dataloader(), ckpt_path='best')
-    if cfg.validation_params.run_test:
+    if net_params.validation_params.run_test:
         trainer.test(model, celeba.test_dataloader(), ckpt_path='best')
 
 

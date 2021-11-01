@@ -1,11 +1,23 @@
 stages:
+  download:
+    cmd: python src/scripts/celeba/download.py
+    deps:
+      - src/scripts/celeba/download.py
+    outs:
+      - data/celeba/img_align_celeba.zip
+      - data/celeba/identity_CelebA.txt
+      - data/celeba/list_eval_partition.txt
   prepare:
     cmd: python src/scripts/celeba/prepare_celeba.py
     deps:
     - src/scripts/celeba/prepare_celeba.py
+    - data/celeba/img_align_celeba.zip
+    - data/celeba/identity_CelebA.txt
+    - data/celeba/list_eval_partition.txt
     outs:
     - data/celeba/img_align_celeba
   train:
     cmd: python src/scripts/celeba/train.py
     deps:
     - src/scripts/celeba/train.py
+    - data/celeba/img_align_celeba

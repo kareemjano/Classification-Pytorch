@@ -2,7 +2,7 @@ numpy
 torch
 torchvision
 pytorch_lightning
-opencv-python
+opencv-contrib-python-headless
 facenet_pytorch
 imgaug
 dvc[gdrive]
@@ -10,3 +10,5 @@ hydra-core
 scikit-learn
 torchsummary
 pretrainedmodels
+mlflow
+git+https://github.com/kareemjano/image_toolbox.git@v0.1#egg=image-toolbox
