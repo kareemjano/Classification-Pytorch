@@ -47,7 +47,8 @@ def train(cfg: DictConfig):
     print("Staring training...")
     celeba = Classification_Dataloader(conf=cfg, batch_size=16, num_workers=12, image_aug_p=0)
     celeba.setup()
-    model = Classification_Net(cfg, nb_classes=celeba.nb_classes())
+    cfg.datasets.celeba.nb_classes = celeba.nb_classes()
+    model = Classification_Net(cfg)
 
     model_select = cfg.nets.select
     net_params = cfg.nets[model_select]

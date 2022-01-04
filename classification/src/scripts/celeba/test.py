@@ -1,6 +1,5 @@
 import hydra
 from omegaconf import DictConfig
-import torch
 from pathlib import Path
 import pytorch_lightning as pl
 import logging
@@ -21,13 +20,9 @@ def test(cfg: DictConfig):
 
     ckpt_path = Path(cfg.datasets.celeba.base_url) / net_params.checkpoint_params.checkpoint_dir / \
                 net_params.exp_name / net_params.validation_params.ckpt_file
-    params = torch.load(ckpt_path)
-    model = Classification_Net(conf=params["hyper_parameters"]["conf"],
-                               nb_classes=params["hyper_parameters"]["nb_classes"])
 
-    model.load_state_dict(params["state_dict"])
-
-    trainer = pl.Trainer(**net_params.trainer_params, resume_from_checkpoint=ckpt_path)
+    model = Classification_Net.load_from_checkpoint(ckpt_path)
+    trainer = pl.Trainer(**net_params.trainer_params)
     trainer.test(model, celeba.test_dataloader())
 
 

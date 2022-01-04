@@ -8,6 +8,7 @@ datasets:
     val_test_r: [0.20, 0.20]
     min_samples_per_class: 5
     nb_samples: 100
+    nb_classes: #will be set on runtime
 
 nets:
   select: bcinception
