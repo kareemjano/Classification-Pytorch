@@ -1,8 +1,9 @@
 import hydra
 import os
 import sys
+import gdown
+
 sys.path.append('src')
-from image_toolbox.dataset_utils.file_utils import download_file_from_google_drive
 
 file_list = [
         # File ID                         Filename
@@ -18,7 +19,8 @@ def download_celeba_dataset(cfg):
     for (file_id, filename) in file_list:
         output_path = os.path.join(cfg.datasets.celeba.base_url, filename)
         if not os.path.exists(output_path):
-            download_file_from_google_drive(output_path, id=file_id)
+            # download_file_from_google_drive(output_path, id=file_id)
+            gdown.download(f"https://drive.google.com/uc?id={file_id}", output_path, quiet=False)
         else:
             print(f"{filename} already exixts. Skipped!!!")
 

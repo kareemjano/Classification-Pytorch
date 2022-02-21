@@ -1,0 +1,36 @@
+select: bcinception
+
+bcinception:
+  exp_name: celeba_classification_myCNN
+  hparams:
+    lr: 0.0001
+    weight_decay: 1e-5
+  params:
+    input_shape: [3, 224, 224]
+  scheduler_params:
+    step_size: 10
+    gamma: 0.5
+  trainer_params:
+    check_val_every_n_epoch: 1
+    fast_dev_run: False
+    max_epochs: 100
+    gpus: 1
+  early_stopping_params:
+    monitor: val/val_acc
+    patience: 5
+    strict: True
+    verbose: False
+    mode: max
+  checkpoint_params:
+    monitor: val/val_acc
+    checkpoint_dir: build/checkpoint
+    filename: MyCNN-epoch-{epoch:02d}-val_acc-{val/val_acc:.2f}
+    save_top_k: 1
+    mode: max
+  validation_params:
+    run_val: True
+    run_test: True
+    ckpt_file: MyCNN-epoch=18-val_acc=0.85.ckpt
+  inference_params:
+    img_path: ./../../../data/celeba/img_align_celeba/9563/132413.jpg
+    ckpt_file: MyCNN-epoch-08-val_acc-0.69.ckpt

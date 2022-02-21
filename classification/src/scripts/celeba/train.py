@@ -16,8 +16,9 @@ logger = logging.getLogger(__name__)
 def get_callbacks(cfg):
     model_select = cfg.nets.select
     net_params = cfg.nets[model_select]
-    dataset_params = cfg.datasets.celeba
-
+    dataset_params = cfg.dataset
+    print('stooopppiinnng2')
+    print(net_params.early_stopping_params)
     early_stop_callback = pl.callbacks.EarlyStopping(
         **net_params.early_stopping_params
     )
@@ -31,6 +32,7 @@ def get_callbacks(cfg):
         filename=checkpoint_params.filename,
         save_top_k=checkpoint_params.save_top_k,
         mode=checkpoint_params.mode,
+        auto_insert_metric_name=False,
     )
 
     lr_monitor = pl.callbacks.LearningRateMonitor()
@@ -47,7 +49,7 @@ def train(cfg: DictConfig):
     print("Staring training...")
     celeba = Classification_Dataloader(conf=cfg, batch_size=16, num_workers=12, image_aug_p=0)
     celeba.setup()
-    cfg.datasets.celeba.nb_classes = celeba.nb_classes()
+    cfg.dataset.n_classes = celeba.nb_classes()
     model = Classification_Net(cfg)
 
     model_select = cfg.nets.select
@@ -65,13 +67,13 @@ def train(cfg: DictConfig):
     stats_logger = None
     if cfg.logger_params.logger.lower() == "tensorboard":
         stats_logger = TensorBoardLogger(
-            Path(cfg.datasets.celeba.base_url) / cfg.logger_params.logger_dir,
+            Path(cfg.dataset.base_url) / cfg.logger_params.logger_dir,
             name=net_params.exp_name
         )
     elif cfg.logger_params.logger.lower() == "mlflow":
         stats_logger = MLFlowLogger(
             experiment_name=net_params.exp_name,
-            tracking_uri=str(Path(cfg.datasets.celeba.base_url) / cfg.logger_params.logger_dir)
+            tracking_uri=str(Path(cfg.dataset.base_url) / cfg.logger_params.logger_dir)
         )
     else:
         logger.info("No valid logger is specified.")

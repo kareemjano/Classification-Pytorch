@@ -18,19 +18,16 @@ def infer(cfg: DictConfig):
     model_select = cfg.nets.select
     net_params = cfg.nets[model_select]
 
-    ckpt_path = Path(cfg.datasets.celeba.base_url) / net_params.checkpoint_params.checkpoint_dir / \
+    ckpt_path = Path(cfg.dataset.base_url) / net_params.checkpoint_params.checkpoint_dir / \
                 net_params.exp_name / net_params.inference_params.ckpt_file
-    params = torch.load(ckpt_path)
-    model = Classification_Net(conf=params["hyper_parameters"]["conf"],
-                               nb_classes=params["hyper_parameters"]["nb_classes"])
-    model.load_state_dict(params["state_dict"])
+    model = Classification_Net.load_from_checkpoint(ckpt_path)
 
     img = Image.open(net_params.inference_params.img_path)
     infer_transform = get_transforms(net_params.params.input_shape, mode="inference")
     img = infer_transform(img)
     prob, label = model.infer(img)
     prob, label = prob.detach().cpu().item(), label.detach().cpu().item()
-    print("Label is", label, "with probability", prob)
+    print(f"Label is {label} with probability {prob*100:2.2f}")
 
 if __name__ == "__main__":
     infer()

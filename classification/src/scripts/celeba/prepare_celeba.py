@@ -44,6 +44,7 @@ def to_folders(cfg: DictConfig) -> None:
     print("Configuration:")
     print(OmegaConf.to_yaml(cfg))
 
+    print(urls["zip_file_url"])
     imgs_path = unzip_file(urls["zip_file_url"], urls['base_url'])
 
     celeba_save_images_in_folders(imgs_path, urls["labels_txt_url"])

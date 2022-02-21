@@ -14,7 +14,7 @@ import numpy as np
 class Classification_Dataloader(pl.LightningDataModule):
     """Dataloader used to load the data for the training the liveness detection and the group loss models which use
     CelebA or LFW, and CFW respectively."""
-    def __init__(self, conf, batch_size=32,
+    def __init__(self, conf, batch_size=64,
                  num_workers=4, image_aug_p=0):
         """
         :param name: Choice from DATASETS
@@ -26,14 +26,14 @@ class Classification_Dataloader(pl.LightningDataModule):
         super().__init__()
         import os
         print("dataloader cwd", os.getcwd())
-        self.base_url = Path(conf.datasets.celeba.base_url)
+        self.dataset_conf = conf.dataset
+        self.base_url = Path(self.dataset_conf.base_url)
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.image_aug_p = image_aug_p
-        self.dataset_conf = conf.datasets.celeba
         self.model_select = conf.nets.select
         self.input_shape = tuple(conf.nets[self.model_select].params.input_shape)
-        self.val_r, self.test_r = tuple(conf.datasets.celeba["val_test_r"])
+        self.val_r, self.test_r = tuple(self.dataset_conf["val_test_r"])
         torch.manual_seed(0)
 
     def setup(self):

@@ -1,0 +1,9 @@
+base_url: ./../../../data/celeba
+zip_file_name: "img_align_celeba.zip"
+data_dir_name: img_align_celeba
+labels_txt_file: identity_CelebA.txt
+split_txt_file: list_eval_partition.txt
+val_test_r: [0.20, 0.20]
+min_samples_per_class: 5
+nb_samples: 1000
+n_classes: #will be set on runtime

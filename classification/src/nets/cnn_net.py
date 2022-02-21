@@ -18,6 +18,7 @@ class Classification_Net(ClassificationModule):
         """
         super().__init__(cfg)
         self.save_hyperparameters()
+        self.scheduler_params = self.net_params.scheduler_params
 
         if self.model_select == "bcinception":
             self.model = pretrainedmodels.bninception(num_classes=1000, pretrained="imagenet")
@@ -34,6 +35,7 @@ class Classification_Net(ClassificationModule):
                 FCN_layer(self.hparam['n_hidden1'], self.hparam['n_hidden2'], dropout=self.hparam['dropout']),
                 nn.Linear(self.hparam['n_hidden2'], self.dataset_cfg.n_classes),
             )
+
 
     def forward(self, x):
         x = self.model(x)

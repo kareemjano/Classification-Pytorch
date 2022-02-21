@@ -1,0 +1,2 @@
+logger: Mlflow #Mlflow or Tensorboard
+logger_dir: build/mlflow
