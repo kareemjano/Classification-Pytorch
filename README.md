@@ -31,3 +31,10 @@ When done run: `docker-compose down`
 
 Run `dvc repro` or `dvc repro --no-commit` if tracking the data is not required.
 
+## Visualization
+### MLFlow
+Run `mlflow ui --backend-store-uri classification/data/celeba/build/mlflow/` to view the MLFllow logs.
+
+![MLFlow Parameters](figures/mlflow_params.png)
+
+![MLFlow Parameters](figures/mlflow_val_acc.png)

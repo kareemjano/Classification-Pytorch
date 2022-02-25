@@ -11,4 +11,5 @@ scikit-learn
 torchsummary
 pretrainedmodels
 mlflow
-git+https://github.com/kareemjano/image_toolbox.git@v0.1#egg=image-toolbox
+gdown
+git+https://github.com/kareemjano/image_toolbox.git@v0.2#egg=image-toolbox

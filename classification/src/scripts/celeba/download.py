@@ -14,10 +14,10 @@ file_list = [
 
 @hydra.main(config_path="../../../conf", config_name="default")
 def download_celeba_dataset(cfg):
-    if not os.path.exists(cfg.datasets.celeba.base_url):
-        os.makedirs(cfg.datasets.celeba.base_url)
+    if not os.path.exists(cfg.dataset.base_url):
+        os.makedirs(cfg.dataset.base_url)
     for (file_id, filename) in file_list:
-        output_path = os.path.join(cfg.datasets.celeba.base_url, filename)
+        output_path = os.path.join(cfg.dataset.base_url, filename)
         if not os.path.exists(output_path):
             # download_file_from_google_drive(output_path, id=file_id)
             gdown.download(f"https://drive.google.com/uc?id={file_id}", output_path, quiet=False)

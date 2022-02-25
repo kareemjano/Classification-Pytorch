@@ -6,6 +6,8 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
     build: ./classification
+    ports:
+      - "5000:5000" #mlflow
     volumes:
       - ./classification/src:/app/src
       - ./classification/.dvc:/app/.dvc
@@ -14,3 +16,8 @@ services:
       - ./classification/start.sh:/app/start.sh
 
     restart: unless-stopped
+
+networks:
+  default:
+    # Use a custom driver
+    driver: custom-driver-1

@@ -8,9 +8,6 @@ from image_toolbox.dataset_utils.celeba_utils import celeba_save_images_in_folde
 from image_toolbox.dataset_utils.file_utils import unzip_file
 
 def check_cfg(cfg: DictConfig, urls):
-    assert not cfg.datasets is None, "datasets could not be found in cfg"
-    assert not cfg.datasets.celeba is None, "datasets.celeba could not be found in cfg"
-
     for key, value in list(urls.items()):
         if 'url' in key:
             p = Path(value)
@@ -23,20 +20,20 @@ def to_folders(cfg: DictConfig) -> None:
 
     print("Preparing Celeba...")
     print("cw dir", os.getcwd())
-    print(os.listdir(cfg.datasets.celeba.base_url))
-    print(cfg.datasets.celeba.base_url)
+    print(os.listdir(cfg.dataset.base_url))
+    print(cfg.dataset.base_url)
 
     urls = {
-        "base_url": Path(cfg.datasets.celeba.base_url).resolve()
+        "base_url": Path(cfg.dataset.base_url).resolve()
     }
     print(urls["base_url"].resolve())
-    print(cfg.datasets.celeba.zip_file_name in os.listdir(os.path.join(urls["base_url"])))
-    print(os.path.join(urls["base_url"], cfg.datasets.celeba.zip_file_name))
-    print(os.path.exists(os.path.join(urls["base_url"], cfg.datasets.celeba.zip_file_name)))
+    print(cfg.dataset.zip_file_name in os.listdir(os.path.join(urls["base_url"])))
+    print(os.path.join(urls["base_url"], cfg.dataset.zip_file_name))
+    print(os.path.exists(os.path.join(urls["base_url"], cfg.dataset.zip_file_name)))
     urls.update({
-        "zip_file_url": urls['base_url'] / cfg.datasets.celeba.zip_file_name,
-        "labels_txt_url": urls['base_url'] / cfg.datasets.celeba.labels_txt_file,
-        "split_txt_url": urls['base_url'] / cfg.datasets.celeba.split_txt_file,
+        "zip_file_url": urls['base_url'] / cfg.dataset.zip_file_name,
+        "labels_txt_url": urls['base_url'] / cfg.dataset.labels_txt_file,
+        "split_txt_url": urls['base_url'] / cfg.dataset.split_txt_file,
     })
 
 

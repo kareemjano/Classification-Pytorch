@@ -18,7 +18,7 @@ def test(cfg: DictConfig):
     model_select = cfg.nets.select
     net_params = cfg.nets[model_select]
 
-    ckpt_path = Path(cfg.datasets.celeba.base_url) / net_params.checkpoint_params.checkpoint_dir / \
+    ckpt_path = Path(cfg.dataset.base_url) / net_params.checkpoint_params.checkpoint_dir / \
                 net_params.exp_name / net_params.validation_params.ckpt_file
 
     model = Classification_Net.load_from_checkpoint(ckpt_path)
